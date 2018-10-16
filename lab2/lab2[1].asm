@@ -19,9 +19,9 @@ segment data use32 class=data
 segment code use32 class=code
     start:
         ; ...
-        MOV AX, [a]
-        ADD AX, [b]
-        MOV [x], AX
+        MOV AX, [a] ; AX = 127
+        ADD AX, [b] ; AX = 256
+        MOV [x], AX ; x = 256
         ; exit(0)
         push    dword 0      ; push the parameter for exit onto the stack
         call    [exit]       ; call exit to terminate the program

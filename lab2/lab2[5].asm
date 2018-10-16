@@ -21,17 +21,22 @@ segment data use32 class=data
 segment code use32 class=code
     start:
         ; ...
-        MOV AL, [c]
-        SUB AL, 2
-        MOV BL, [a]
-        ADD BL, 3
+        MOV AL, [c] ; AL = c
+        SUB AL, 2 ; Al = c - 2
+        
+        MOV BL, [a] ; BL = a
+        ADD BL, 3 ; BL = a + 3
+        
         MUL BL ; AX = (c-2)*(3+a)
-        MOV BL, [d]
-        SUB BL, 4
+        
+        MOV BL, [d] ; BL = d
+        SUB BL, 4 ; BL = d-4
+        
         DIV BL ; AL = (c-2)*(3+a)/(d-4)
         MOV AH, 0 ; AX = (c-2)*(3+a)/(d-4)
-        ADD AX, [f]
-        MOV [x], AX
+        
+        ADD AX, [f] ; AX = f+(c-2)*(3+a)/(d-4)
+        MOV [x], AX ; x = f+(c-2)*(3+a)/(d-4)
         
         ; exit(0)
         push    dword 0      ; push the parameter for exit onto the stack
