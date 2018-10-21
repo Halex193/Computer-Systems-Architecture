@@ -1,4 +1,5 @@
-;f+(c-2)*(3+a)/(d-4)
+;a - byte, b - word, c - double word, d - qword - Signed representation
+;(d-b)-a-(b-c)
 bits 32 ; assembling for the 32 bits architecture
 
 ; declare the EntryPoint (a label defining the very first instruction of the program)
@@ -12,32 +13,40 @@ import exit msvcrt.dll    ; exit is a function that ends the calling process. It
 ; our data is declared here (the variables needed by our program)
 segment data use32 class=data
     ; ...
-    a db 0
-    c db 5
-    d db 7
-    f dw 200
-    x dw 0
+    a db 10
+    b dw 10
+    c dd 15
+    d dq 15
 ; our code starts here
 segment code use32 class=code
     start:
         ; ...
-        MOV AL, [c] ; AL = c
-        SUB AL, 2 ; AL = c - 2
+        MOV EBX, dword [d]
+        MOV ECX, dword [d + 4] ; ECX:EBX = d
         
-        MOV BL, [a] ; BL = a
-        ADD BL, 3 ; BL = a + 3
+        MOV AX, [b]
+        CWDE
+        CDQ
+        SUB EBX, EAX ; possible overflow
+        SUB ECX, EDX ; ECX:EBX = d - b
         
-        MUL BL ; AX = (c-2)*(3+a)
         
-        MOV BL, [d] ; BL = d
-        SUB BL, 4 ; BL = d-4
         
-        DIV BL ; AL = (c-2)*(3+a)/(d-4)
-        MOV AH, 0 ; AX = (c-2)*(3+a)/(d-4)
+        MOV AL, [a]
+        CBW
+        CWDE
+        CDQ
+        SUB EBX, EAX
+        SBB ECX, EDX ; ECX:EBX = (d - b) - a
         
-        ADD AX, [f] ; AX = f+(c-2)*(3+a)/(d-4)
-        MOV [x], AX ; x = f+(c-2)*(3+a)/(d-4)
+
+        MOV AX, [b]
+        CWDE
+        SUB EAX, [c] ; EAX = b - c
         
+        CDQ
+        SUB EBX, EAX
+        SUB ECX, EDX ; ECX:EBX = (d-b)-a-(b-c)
         ; exit(0)
         push    dword 0      ; push the parameter for exit onto the stack
         call    [exit]       ; call exit to terminate the program

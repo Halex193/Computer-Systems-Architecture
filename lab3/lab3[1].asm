@@ -1,4 +1,5 @@
-;f+(c-2)*(3+a)/(d-4)
+;a - byte, b - word, c - double word, d - qword - Unsigned representation
+;(d+d)-a-b-c
 bits 32 ; assembling for the 32 bits architecture
 
 ; declare the EntryPoint (a label defining the very first instruction of the program)
@@ -12,31 +13,32 @@ import exit msvcrt.dll    ; exit is a function that ends the calling process. It
 ; our data is declared here (the variables needed by our program)
 segment data use32 class=data
     ; ...
-    a db 0
-    c db 5
-    d db 7
-    f dw 200
-    x dw 0
+    a db 10
+    b dw 10
+    c dd 10
+    d dq 15
 ; our code starts here
 segment code use32 class=code
     start:
         ; ...
-        MOV AL, [c] ; AL = c
-        SUB AL, 2 ; AL = c - 2
+        MOV EAX, dword [d]
+        MOV EDX, dword [d + 4] ; EDX:EAX = d
         
-        MOV BL, [a] ; BL = a
-        ADD BL, 3 ; BL = a + 3
+        ADD EAX, dword [d]
+        ADC EDX, dword [d + 4] ; EDX:EAX = d + d
         
-        MUL BL ; AX = (c-2)*(3+a)
+        MOV EBX, 0
+        MOV BL, [a]
+        SUB EAX, EBX
+        SBB EDX, 0 ; EDX:EAX = (d + d) - a
         
-        MOV BL, [d] ; BL = d
-        SUB BL, 4 ; BL = d-4
+        MOV EBX, 0
+        MOV BX, [b]
+        SUB EAX, EBX
+        SBB EDX, 0 ; EDX:EAX = (d + d) - a - b
         
-        DIV BL ; AL = (c-2)*(3+a)/(d-4)
-        MOV AH, 0 ; AX = (c-2)*(3+a)/(d-4)
-        
-        ADD AX, [f] ; AX = f+(c-2)*(3+a)/(d-4)
-        MOV [x], AX ; x = f+(c-2)*(3+a)/(d-4)
+        SUB EAX, [c]
+        SBB EDX, 0 ; EDX:EAX = (d + d) - a - b - c
         
         ; exit(0)
         push    dword 0      ; push the parameter for exit onto the stack
