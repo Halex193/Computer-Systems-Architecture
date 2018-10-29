@@ -32,27 +32,25 @@ segment code use32 class=code
         MOV AX, 2
         CWD ; DX:AX = 2
         IDIV word [c] ; AX = 2/c
+        CWD ; DX:AX = 2/c
         
-        MOV DX, AX ; DX = 2/c
-        MOV AL, [a]
-        CBW ; AX = a
-        ADD AX, DX
-        MOV DX, 0
-        ADC DX, 0 ; DX:AX = a+ 2/c
+        ADD AL, [a]
+        ADC AH, 0
+        ADC DX, 0 ; DX:AX = a + 2/c
         
         ADD BX, AX
         ADC DX, CX ; DX:BX = (a+b*c+2/c)
         
         MOV AL, [a]
-        CBW
+        CBW ; AX = a
         ADD AX, 2 ; AX = 2 + a
         MOV CX, AX; CX = 2 + a
         MOV AX, BX ; DX:AX = (a+b*c+2/c)
         
         IDIV CX ; AX = (a+b*c+2/c)/(2+a)
         CWDE ; EAX = (a+b*c+2/c)/(2+a)
+        CDQ ; EDX:EAX = (a+b*c+2/c)/(2+a)
         ADD EAX, [e]
-        MOV EDX, 0
         ADC EDX, 0 ; EDX:EAX = (a+b*c+2/c)/(2+a)+e
         
         ADD EAX, [x]

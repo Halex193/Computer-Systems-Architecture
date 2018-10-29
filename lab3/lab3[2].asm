@@ -27,8 +27,8 @@ segment code use32 class=code
         MOV AX, [b]
         CWDE
         CDQ
-        SUB EBX, EAX ; possible overflow
-        SUB ECX, EDX ; ECX:EBX = d - b
+        SUB EBX, EAX
+        SBB ECX, EDX ; ECX:EBX = d - b
         
         
         
@@ -46,7 +46,7 @@ segment code use32 class=code
         
         CDQ
         SUB EBX, EAX
-        SUB ECX, EDX ; ECX:EBX = (d-b)-a-(b-c)
+        SBB ECX, EDX ; ECX:EBX = (d-b)-a-(b-c)
         ; exit(0)
         push    dword 0      ; push the parameter for exit onto the stack
         call    [exit]       ; call exit to terminate the program
