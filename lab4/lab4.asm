@@ -17,13 +17,13 @@ import exit msvcrt.dll    ; exit is a function that ends the calling process. It
 
 ; our data is declared here (the variables needed by our program)
 segment data use32 class=data
-    a dw 200
-    b dw 0
+    a dw 1011100101011001b
+    b dd 0
 
 ; our code starts here
 segment code use32 class=code
     start:
-        MOV BX, [b] ;the bits 0-3 of B have the value 0;
+        MOV EBX, [b] ;the bits 0-3 of B have the value 0;
         
         MOV AX, [a]
         AND AX, 111100000000b
@@ -44,12 +44,12 @@ segment code use32 class=code
         
         OR BX, 1111000000000000b ; the bits 12-15 of B have the value 1
         
-        MOV AX, BX
+        MOV EAX, EBX
         MOV CL, 16
-        SHL AX, CL
-        OR BX, AX ; the bits 16-31 of B are the same as the bits 0-15 of B
+        SHL EAX, CL
+        OR EBX, EAX ; the bits 16-31 of B are the same as the bits 0-15 of B
         
-        MOV [b], BX
+        MOV [b], EBX
         
         ; exit(0)
         push    dword 0      ; push the parameter for exit onto the stack
