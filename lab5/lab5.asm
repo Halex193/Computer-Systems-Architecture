@@ -22,6 +22,7 @@ segment code use32 class=code
     start:
         MOV EAX, 0
         MOV ECX, la
+        JECXZ finish_A
         MOV ESI, 0
         repeat_A:
             MOV AL, [A + ESI]
@@ -36,8 +37,10 @@ segment code use32 class=code
             skip_A:
             INC ESI
         LOOP repeat_A
+        finish_A:
         
         MOV ECX, lb
+        JECXZ finish_B
         MOV ESI, 0
         repeat_B:
             MOV AL, [B + ESI]
@@ -52,7 +55,7 @@ segment code use32 class=code
             skip_B:
             INC ESI
         LOOP repeat_B
-        
+        finish_B:
         ; exit(0)
         push    dword 0      ; push the parameter for exit onto the stack
         call    [exit]       ; call exit to terminate the program
