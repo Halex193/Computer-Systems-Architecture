@@ -11,14 +11,6 @@ extern open_file
 extern close_file
 extern print_numbers
 
-extern fopen, fscanf, fclose, printf, feof
-import fopen msvcrt.dll
-import fscanf msvcrt.dll
-import fclose msvcrt.dll
-import printf msvcrt.dll
-import feof msvcrt.dll
-
-
 segment data class=data use32
 	file_name db 'numbers.txt', 0
 	max_count equ 100
