@@ -9,8 +9,9 @@ import scanf msvcrt.dll
 segment data class=data use32
     n dd 0
     read_format db '%d', 0
-    numbers resb 100
-    result resb 100
+    maxN equ 100
+    numbers resd maxN
+    result resb maxN
     ten dw 10
     
 segment code class=code use32
@@ -37,10 +38,9 @@ segment code class=code use32
         MOV ECX, [n]
         .number_loop:
             LODSW
-            MOV BX, AX
-            LODSW
             MOV DX, AX
-            MOV AX, BX
+            LODSW
+            XCHG DX, AX
             MOV BL, 0
             .divide_loop:
                 CMP AX, 0
